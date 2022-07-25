@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Room XML</string>
+    <string name="app_name">D Note</string>
     <string name="title_activity_note">NoteActivity</string>
     <string name="title_activity_notes">NotesActivity</string>
     <string name="search_hint">Search Notes</string>
