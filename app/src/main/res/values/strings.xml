@@ -3,4 +3,9 @@
     <string name="title_activity_note">NoteActivity</string>
     <string name="title_activity_notes">NotesActivity</string>
     <string name="search_hint">Search Notes</string>
+    <string name="dialog_text">Sorry.. Tha application crashed. Please send a report to the developers.</string>
+    <string name="dialog_title">D Note Crashed</string>
+    <string name="dialog_positive">Send</string>
+    <string name="dialog_negative">Don\'t Send</string>
+    <string name="dialog_comment">You can add a comment here:</string>
 </resources>

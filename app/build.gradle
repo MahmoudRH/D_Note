@@ -62,4 +62,12 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
+    // ACRA crash report library
+    implementation "ch.acra:acra-mail:5.9.5"
+    implementation "ch.acra:acra-dialog:5.9.5"
+
+
+
+
+
 }
