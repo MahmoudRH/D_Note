@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.elevation.SurfaceColors
 import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.data.Note
 import com.mahmoudrh.roomxml.utils.DateFormatter
@@ -19,6 +21,7 @@ class NotesAdapter(
 
 
     class NotesHolder(item: View) : RecyclerView.ViewHolder(item) {
+        val noteEdge:View
         val title: TextView
         val content: TextView
         val date: TextView
@@ -28,6 +31,7 @@ class NotesAdapter(
             content = item.findViewById(R.id.tv_content)
             date = item.findViewById(R.id.tv_date)
             card = item.findViewById(R.id.note_card)
+            noteEdge = item.findViewById(R.id.note_edge)
         }
     }
 
@@ -37,6 +41,18 @@ class NotesAdapter(
     }
 
     override fun onBindViewHolder(holder: NotesHolder, position: Int) {
+
+//        holder.noteEdge.setBackgroundColor(com.google.android.material.R.color.design_default_color_primary)
+/*        if (DynamicColors.isDynamicColorAvailable())
+            holder.noteEdge.setBackgroundResource(com.google.android.material.R.color.material_dynamic_primary50)
+        else
+            holder.noteEdge.setBackgroundResource(R.color.purple_500)*/
+
+        holder.noteEdge.setBackgroundResource(
+            if (DynamicColors.isDynamicColorAvailable()) com.google.android.material.R.color.material_dynamic_primary50
+            else R.color.purple_500
+        )
+
         holder.title.text = notesList[position].title
         holder.content.text = notesList[position].content
         holder.date.text = DateFormatter.formatDate(notesList[position].date)

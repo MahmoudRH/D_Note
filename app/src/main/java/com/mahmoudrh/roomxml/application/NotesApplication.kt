@@ -2,6 +2,7 @@ package com.mahmoudrh.roomxml.application
 
 import android.app.Application
 import android.content.Context
+import com.google.android.material.color.DynamicColors
 import com.mahmoudrh.roomxml.BuildConfig
 import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.data.NotesDB
@@ -43,5 +44,10 @@ class NotesApplication: Application() {
                 reportFileName = "Crash.txt"
             }
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        DynamicColors.applyToActivitiesIfAvailable(this)
     }
 }
