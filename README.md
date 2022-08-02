@@ -12,6 +12,7 @@ The App is built with XML.
  - Swipe to Delete a Note.
  - Undo Deletion.
  - Search Notes. 
+ - Material You Support!
 # Screenshots
 <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/all_notes.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/add_new.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/search.png" width="250" style="max-width:100%;">
 
