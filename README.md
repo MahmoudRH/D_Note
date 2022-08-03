@@ -1,5 +1,19 @@
 # D Note
-[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+
+<div align="center">
+
+[![Latest Release](https://img.shields.io/github/v/release/MahmoudRH/D_Note.svg?logo=github&style=for-the-badge)](https://github.com/MahmoudRH/D_Note/releases/latest)
+[![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg?style=for-the-badge)](https://www.gnu.org/licenses/gpl-2.0)
+
+
+[<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/get-it-on-github.png"
+      alt='Get it on GitHub'
+      height="80">](https://github.com/MahmoudRH/D_Note/releases/latest) 
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+      alt='Get it on IzzyOnDroid'
+      height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.mahmoudrh.roomxml)
+
+</div>
 
 Android Notes app that implements Room persistence library with Kotlin Coroutines.
 
