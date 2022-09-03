@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">D Note</string>
+
+<!-- START: crash dialog values:   -->
+    <string name="search_hint">Search Notes</string>
+    <string name="dialog_text">Sorry.. Tha application crashed. Please send a report to the developers.</string>
+    <string name="dialog_title">D Note Crashed</string>
+    <string name="dialog_positive">Send</string>
+    <string name="dialog_negative">Don\'t Send</string>
+    <string name="dialog_comment">You can add a comment here:</string>
+<!-- END: crash dialog values:  -->
+
+
+</resources>
