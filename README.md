@@ -1,5 +1,10 @@
 # D Note
 
+
+<div align="center">
+<h1><b><i><code>  This Branch is the OLD branch and it won't be updated.</code></i></b></h1>
+</div>
+
 <div align="center">
 
 [![Latest Release](https://img.shields.io/github/v/release/MahmoudRH/D_Note.svg?logo=github&style=for-the-badge)](https://github.com/MahmoudRH/D_Note/releases/latest)
@@ -17,7 +22,10 @@
 
 Android Notes app that implements Room persistence library with Kotlin Coroutines.
 
-The App is built with XML.
+The App is built with XML. 
+
+
+
 ## Features:
  - View All Notes
  - Adding a Note.
@@ -28,7 +36,7 @@ The App is built with XML.
  - Search Notes. 
  - Material You Support!
 # Screenshots
-<img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/all_notes.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/add_new.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/search.png" width="250" style="max-width:100%;">
+<img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/all_notes.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/add_new.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/search.png" width="250" style="max-width:100%;">
 
-<img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/updating.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/selection.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/main/screenshots/deletion.png" width="250" style="max-width:100%;">
+<img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/updating.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/selection.png" width="250" style="max-width:100%;"> <img src="https://github.com/MahmoudRH/RoomXML/blob/xml/screenshots/deletion.png" width="250" style="max-width:100%;">
  
