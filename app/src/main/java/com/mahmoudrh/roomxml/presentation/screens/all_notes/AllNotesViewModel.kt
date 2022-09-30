@@ -27,13 +27,14 @@ class AllNotesViewModel @Inject constructor(
     private var recentlyDeletedNote: Note? = null
     private var getNotesJob: Job? = null
     private val preferences = application.getSharedPreferences("OrderPreferences",Context.MODE_PRIVATE)
+    val selectedNotes : MutableList<Note> = mutableListOf()
+    val isSelectionModeEnabled = mutableStateOf<Boolean>(false)
     init {
         val ob = preferences.getInt("OrderBy",OrderBy.DATE)
         val ot = preferences.getInt("OrderType",OrderType.DESCENDING)
         val orderPreference = OrderBy.getOrderBy(orderType = ot, orderBy = ob)
         loadAllNotes(orderPreference)
     }
-
     private fun loadAllNotes(orderBy: OrderBy) {
         getNotesJob?.cancel() // cancel if already running
         getNotesJob = noteUseCases.getAllNotes(orderBy).onEach {
@@ -75,6 +76,15 @@ class AllNotesViewModel @Inject constructor(
                 _notesState.value = notesState.value.copy(
                     isOrderSectionVisible = !notesState.value.isOrderSectionVisible
                 )
+            }
+            is AllNotesEvent.SelectNote -> {
+                if (selectedNotes.contains(event.note)){
+                    selectedNotes.remove(event.note)
+                }else{
+                    selectedNotes.add(event.note)
+                }
+
+               isSelectionModeEnabled.value = selectedNotes.isNotEmpty()
             }
         }
     }

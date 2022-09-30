@@ -36,7 +36,6 @@ fun AllNotesScreen(
         topBar = {
             AppTopBars.DefaultTopBar(title = "D Note", actionIcon = Icons.Default.Search) {
                 navigator.navigate(SearchScreenDestination)
-                /*TODO Navigate To Search Screen*/
             }
         },
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
@@ -52,6 +51,7 @@ fun AllNotesScreen(
                 .padding(paddingValues),
             contentPadding = PaddingValues(start = 20.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
         ) {
+
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -78,14 +78,35 @@ fun AllNotesScreen(
                     )
                 }
             }
+            item {
+                AnimatedVisibility(
+                    visible = viewModel.isSelectionModeEnabled.value,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround) {
+                            Button(onClick = { /*TODO*/ }) {
+                                Text(text = "Delete Selected")
+                            }
+                            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
+                                Text(text = "Delete All")
+                            }
+
+                        }
+                }
+            }
             items(notesState.notes, key = { it.id }) {
 
                 NoteItem(
                     modifier = Modifier.padding(vertical = 8.dp),
                     note = it,
+                    isSelectionModeEnabled = viewModel.isSelectionModeEnabled,
                     onClick = { navigator.navigate(NoteScreenDestination(it)) },
-                    onSwipeOut = { noteObject ->
-                        viewModel.onEvent(AllNotesEvent.DeleteNote(noteObject))
+                    onLongClick = {
+                        viewModel.onEvent(AllNotesEvent.SelectNote(it))
+                    },
+                    onSwipeOut = {
+                        viewModel.onEvent(AllNotesEvent.DeleteNote(it))
                         scope.launch {
                             val result = snackBarHostState.showSnackbar(
                                 message = "Note deleted",

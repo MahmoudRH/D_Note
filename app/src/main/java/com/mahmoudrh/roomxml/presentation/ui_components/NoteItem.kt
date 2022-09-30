@@ -1,20 +1,22 @@
 package com.mahmoudrh.roomxml.presentation.ui_components
 
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,8 +33,10 @@ import kotlin.math.absoluteValue
 fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
-    onClick:()->Unit,
-    onSwipeOut:(Note)->Unit
+    isSelectionModeEnabled: MutableState<Boolean>,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    onSwipeOut: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -40,6 +44,8 @@ fun NoteItem(
     var alpha by mutableStateOf(0f)
     val vanishOffsetRight = remember { Animatable(250f) }
     val vanishOffsetLeft = remember { Animatable(-250f) }
+
+    var isSelected by remember { mutableStateOf(note.isSelected) }
     fun resetOffset() {
         scope.launch {
             val resetOffset = Animatable(offsetX)
@@ -60,21 +66,34 @@ fun NoteItem(
                     vanishOffsetLeft.animateTo(-1050f, tween(80)) { offsetX = value }
             }
         }.invokeOnCompletion {
-            onSwipeOut(note)
+            onSwipeOut()
         }
     }
     Card(
         modifier = modifier
             .graphicsLayer {
-                alpha = try{
+                alpha = try {
                     (offsetX) / 1000
-                }catch (e: ArithmeticException){
+                } catch (e: ArithmeticException) {
                     1f
                 }
-                this.alpha = (1f - alpha.absoluteValue).coerceIn(0f,1f)
+                this.alpha = (1f - alpha.absoluteValue).coerceIn(0f, 1f)
                 this.translationX = offsetX
             }
-            .clickable { onClick() }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        if (isSelectionModeEnabled.value) {
+                            isSelected = !isSelected
+                            onLongClick()
+                        } else
+                            onClick()
+                    },
+                    onLongPress = {
+                        isSelected = !isSelected
+                        onLongClick()
+                    })
+            }
             .draggable(
                 rememberDraggableState(onDelta = { delta ->
                     offsetX += delta
@@ -103,6 +122,26 @@ fun NoteItem(
                     .fillMaxHeight()
                     .weight(0.2f)
             )
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = expandHorizontally(),
+                exit = shrinkHorizontally()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 4.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
 
             Column(
                 modifier = Modifier
@@ -142,7 +181,7 @@ fun NoteItem(
 fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
-    onClick:()->Unit,
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier

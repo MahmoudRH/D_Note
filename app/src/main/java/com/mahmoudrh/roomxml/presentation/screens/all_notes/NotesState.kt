@@ -8,6 +8,6 @@ data class NotesState(
     val notes: List<Note> = emptyList(),
     val order: OrderBy = OrderBy.Date(OrderType.Descending),
     val isOrderSectionVisible: Boolean = false,
-    val isListLoading:Boolean = true,
-    val isListEmpty:Boolean = false
+    val isListLoading: Boolean = true,
+    val isListEmpty: Boolean = false
 )

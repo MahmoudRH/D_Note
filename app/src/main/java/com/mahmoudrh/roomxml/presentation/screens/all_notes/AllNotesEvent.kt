@@ -6,6 +6,7 @@ import com.mahmoudrh.roomxml.domain.utils.OrderBy
 sealed class AllNotesEvent {
     data class Order(val order: OrderBy): AllNotesEvent()
     data class DeleteNote(val note: Note): AllNotesEvent()
+    data class SelectNote(val note: Note): AllNotesEvent()
     object RestoreNote: AllNotesEvent()
     object ToggleOrderSection: AllNotesEvent()
 }

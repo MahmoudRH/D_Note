@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "notes")
@@ -13,6 +14,7 @@ data class Note(
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "date") val date: String,
 ) : Parcelable {
+    @Ignore() var isSelected:Boolean = false
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()?:"no title",
