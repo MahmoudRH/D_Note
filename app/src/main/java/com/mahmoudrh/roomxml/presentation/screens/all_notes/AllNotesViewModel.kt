@@ -86,6 +86,20 @@ class AllNotesViewModel @Inject constructor(
 
                isSelectionModeEnabled.value = selectedNotes.isNotEmpty()
             }
+            AllNotesEvent.DeleteAllNotes -> {
+                viewModelScope.launch {
+                    noteUseCases.deleteAllNotes()
+                }
+            }
+            AllNotesEvent.DeleteSelectedNotes -> {
+                viewModelScope.launch {
+                    selectedNotes.forEach {
+                        noteUseCases.deleteNote(it)
+                    }
+                    isSelectionModeEnabled.value = false
+                    selectedNotes.clear()
+                }
+            }
         }
     }
 

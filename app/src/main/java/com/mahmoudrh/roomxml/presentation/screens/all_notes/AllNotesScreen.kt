@@ -85,10 +85,12 @@ fun AllNotesScreen(
                     exit = shrinkVertically()
                 ) {
                         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround) {
-                            Button(onClick = { /*TODO*/ }) {
+                            Button(onClick = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) }) {
                                 Text(text = "Delete Selected")
                             }
-                            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
+                            Button(onClick = {
+                                viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
+                                             }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
                                 Text(text = "Delete All")
                             }
 
