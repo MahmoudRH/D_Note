@@ -8,7 +8,7 @@ The App is built with ~~XML~~ [Jetpack-Compose](https://developer.android.com/je
 
 [![Latest Release](https://img.shields.io/github/v/release/MahmoudRH/D_Note.svg?logo=github&style=for-the-badge)](https://github.com/MahmoudRH/D_Note/releases/latest)
 [![GitHub all releases](https://img.shields.io/github/downloads/MahmoudRH/D_Note/total?color=blue&label=downloads&style=for-the-badge)](https://github.com/MahmoudRH/D_Note/releases/latest)
-[![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg?style=for-the-badge)](https://www.gnu.org/licenses/gpl-2.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](https://www.gnu.org/licenses/gpl-3.0)
 
 
 [<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/get-it-on-github.png"
