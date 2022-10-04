@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
+import com.mahmoudrh.roomxml.presentation.utils.ContentTransformation
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -27,19 +29,30 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
 
     val focusManager = LocalFocusManager.current
     val eventName = viewModel.eventName
-    Scaffold(topBar = {
-        AppTopBars.DefaultTopBar(
-            title = eventName.value,
-            onNavigateBack = { navigator.popBackStack() },
-            actionIcon = Icons.Default.Check,
-            onActionClick = {
-                if (viewModel.isUpdatingNote()) {
-                    viewModel.onEvent(NoteEvent.UpdateNote)
-                } else {
-                    viewModel.onEvent(NoteEvent.InsertNote)
-                }
-            })
-    }) { paddingValues ->
+    val icon = if (viewModel.isEditModeEnabled.value) Icons.Default.Check else Icons.Default.Edit
+    val text = if (viewModel.isEditModeEnabled.value) "Save" else "Edit"
+    Scaffold(
+        topBar = {
+            AppTopBars.DefaultTopBar(
+                title = eventName.value,
+                onNavigateBack = { navigator.popBackStack() },
+                actionText = text,
+                actionIcon = icon,
+                onActionClick = {
+                    if(viewModel.isEditModeEnabled.value) {
+                        if (viewModel.isUpdatingNote()) {
+                            viewModel.onEvent(NoteEvent.UpdateNote)
+                        } else {
+                            viewModel.onEvent(NoteEvent.InsertNote)
+                        }
+                    }else{
+                        viewModel.onEvent(NoteEvent.ToggleEditMode)
+                    }
+                },
+                actionIconVisibility = viewModel.canDoAction.value
+            )
+        },
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -48,9 +61,10 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = viewModel.noteTitle.value,
-                onValueChange = { viewModel.noteTitle.value = it },
+                onValueChange = { viewModel.onTitleChange(it) },
                 label = { Text(text = "Title") },
                 singleLine = true,
+                enabled = viewModel.isEditModeEnabled.value,
                 placeholder = { Text(text = "Add some title...") },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -64,10 +78,12 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
             OutlinedTextField(
                 modifier = Modifier.fillMaxSize(),
                 value = viewModel.noteContent.value,
-                onValueChange = { viewModel.noteContent.value = it },
+                onValueChange = { viewModel.onContentChange(it) },
                 label = { Text(text = "Content") },
+                enabled = viewModel.isEditModeEnabled.value,
                 placeholder = { Text(text = "Add some content...") },
-                isError = viewModel.isContentError.value
+                isError = viewModel.isContentError.value,
+                visualTransformation = ContentTransformation(viewModel.isEditModeEnabled.value)
             )
         }
     }
