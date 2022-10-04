@@ -24,6 +24,7 @@ class NoteViewModel @Inject constructor(
     val isContentError = mutableStateOf(false)
     val isEventSuccess = mutableStateOf(false)
     val eventName = mutableStateOf("Adding New Note")
+
     init {
         note?.let {
             eventName.value = "Editing Note"
@@ -78,6 +79,7 @@ class NoteViewModel @Inject constructor(
 
     private fun isTitleEmpty() = noteTitle.value.isEmpty()
     private fun isContentEmpty() = noteContent.value.isEmpty()
-    fun isUpdatingNote() = note != null //if the object passed isn't null, the user is updating an existing note.
+    fun isUpdatingNote() =
+        note != null //if the object passed isn't null, the user is updating an existing note.
 
 }

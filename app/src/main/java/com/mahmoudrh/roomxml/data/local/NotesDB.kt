@@ -8,7 +8,7 @@ import com.mahmoudrh.roomxml.domain.models.Note
 abstract class NotesDB : RoomDatabase() {
     abstract val noteDAO: NoteDAO
 
-    companion object{
+    companion object {
         const val DATABASE_NAME = "NotesDB"
     }
 }

@@ -28,11 +28,15 @@ fun EmptyListScreen(visibility: Boolean, text: String, fontSize: TextUnit = 20.s
         exit = fadeOut()
     ) {
         Box(
-            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
                 text = text,
                 fontSize = fontSize,
                 color = MaterialTheme.colorScheme.secondary,

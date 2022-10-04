@@ -26,5 +26,4 @@ interface NoteDAO {
     fun searchNotes(searchWord: String? = null): Flow<List<Note>>
 
 
-
 }

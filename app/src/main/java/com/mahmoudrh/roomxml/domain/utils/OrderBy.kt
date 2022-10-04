@@ -48,6 +48,7 @@ sealed class OrderBy(val orderType: OrderType) {
                 is Title -> TITLE
             }
         }
+
         fun getOrderTypeInt(orderBy: OrderBy): Int {
             return when (orderBy.orderType) {
                 OrderType.Ascending -> OrderType.ASCENDING

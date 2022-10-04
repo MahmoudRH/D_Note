@@ -26,15 +26,18 @@ class AllNotesViewModel @Inject constructor(
     val notesState: State<NotesState> = _notesState
     private var recentlyDeletedNote: Note? = null
     private var getNotesJob: Job? = null
-    private val preferences = application.getSharedPreferences("OrderPreferences",Context.MODE_PRIVATE)
-    val selectedNotes : MutableList<Note> = mutableListOf()
+    private val preferences =
+        application.getSharedPreferences("OrderPreferences", Context.MODE_PRIVATE)
+    val selectedNotes: MutableList<Note> = mutableListOf()
     val isSelectionModeEnabled = mutableStateOf<Boolean>(false)
+
     init {
-        val ob = preferences.getInt("OrderBy",OrderBy.DATE)
-        val ot = preferences.getInt("OrderType",OrderType.DESCENDING)
+        val ob = preferences.getInt("OrderBy", OrderBy.DATE)
+        val ot = preferences.getInt("OrderType", OrderType.DESCENDING)
         val orderPreference = OrderBy.getOrderBy(orderType = ot, orderBy = ob)
         loadAllNotes(orderPreference)
     }
+
     private fun loadAllNotes(orderBy: OrderBy) {
         getNotesJob?.cancel() // cancel if already running
         getNotesJob = noteUseCases.getAllNotes(orderBy).onEach {
@@ -57,9 +60,10 @@ class AllNotesViewModel @Inject constructor(
             }
             is AllNotesEvent.Order -> {
                 if (notesState.value.order::class == event.order::class &&
-                    notesState.value.order.orderType == event.order.orderType) { // same order and same order type
+                    notesState.value.order.orderType == event.order.orderType
+                ) { // same order and same order type
                     return
-                }else {
+                } else {
                     loadAllNotes(event.order)
                     saveIntoSharedPreferences(event.order)
                 }
@@ -78,18 +82,21 @@ class AllNotesViewModel @Inject constructor(
                 )
             }
             is AllNotesEvent.SelectNote -> {
-                if (selectedNotes.contains(event.note)){
+                if (selectedNotes.contains(event.note)) {
                     selectedNotes.remove(event.note)
-                }else{
+                } else {
                     selectedNotes.add(event.note)
                 }
 
-               isSelectionModeEnabled.value = selectedNotes.isNotEmpty()
+                isSelectionModeEnabled.value = selectedNotes.isNotEmpty()
             }
             AllNotesEvent.DeleteAllNotes -> {
                 viewModelScope.launch {
                     noteUseCases.deleteAllNotes()
+                    isSelectionModeEnabled.value = false
+                    selectedNotes.clear()
                 }
+
             }
             AllNotesEvent.DeleteSelectedNotes -> {
                 viewModelScope.launch {
@@ -107,8 +114,8 @@ class AllNotesViewModel @Inject constructor(
         val ot = OrderBy.getOrderTypeInt(order)
         val ob = OrderBy.getOrderByInt(order)
         preferences.edit().apply {
-            putInt("OrderType",ot)
-            putInt("OrderBy",ob)
+            putInt("OrderType", ot)
+            putInt("OrderBy", ob)
             apply()
         }
     }

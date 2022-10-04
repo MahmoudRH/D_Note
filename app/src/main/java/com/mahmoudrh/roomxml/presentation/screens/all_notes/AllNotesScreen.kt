@@ -84,17 +84,21 @@ fun AllNotesScreen(
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
-                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround) {
-                            Button(onClick = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) }) {
-                                Text(text = "Delete Selected")
-                            }
-                            Button(onClick = {
-                                viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
-                                             }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
-                                Text(text = "Delete All")
-                            }
-
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Button(onClick = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) }) {
+                            Text(text = "Delete Selected")
                         }
+                        Button(onClick = {
+                            viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
+                        }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
+                            Text(text = "Delete All")
+                        }
+
+                    }
                 }
             }
             items(notesState.notes, key = { it.id }) {

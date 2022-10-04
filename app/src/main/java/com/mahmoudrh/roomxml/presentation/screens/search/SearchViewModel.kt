@@ -13,15 +13,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-       private val noteUseCases: NoteUseCases
-       ) : ViewModel() {
+    private val noteUseCases: NoteUseCases
+) : ViewModel() {
     val searchWord = mutableStateOf("")
-    var resultsList : List<Note> = emptyList()
+    var resultsList: List<Note> = emptyList()
     val isLoading = mutableStateOf<Boolean>(false)
     val isResultsListEmpty = mutableStateOf<Boolean>(false)
 
-    private var searchJob:Job? = null
-    fun search(){
+    private var searchJob: Job? = null
+    fun search() {
         isLoading.value = true
         searchJob?.cancel()
         searchJob = noteUseCases.searchNotes(searchWord.value.trim()).onEach {

@@ -37,7 +37,9 @@ fun OrderSection(
                     .weight(0.2f)
             )
             Column(
-                modifier = Modifier.weight(10f).padding(horizontal = 8.dp)
+                modifier = Modifier
+                    .weight(10f)
+                    .padding(horizontal = 8.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),

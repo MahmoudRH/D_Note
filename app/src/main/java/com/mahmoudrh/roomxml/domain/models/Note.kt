@@ -9,17 +9,19 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "notes")
 data class Note(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id:Int = 0,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Int = 0,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "date") val date: String,
 ) : Parcelable {
-    @Ignore() var isSelected:Boolean = false
+    @Ignore()
+    var isSelected: Boolean = false
+
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
-        parcel.readString()?:"no title",
-        parcel.readString()?:"no content",
-        parcel.readString()?:"no date",
+        parcel.readString() ?: "no title",
+        parcel.readString() ?: "no content",
+        parcel.readString() ?: "no date",
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

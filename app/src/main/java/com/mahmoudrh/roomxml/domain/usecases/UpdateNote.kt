@@ -4,7 +4,7 @@ import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.repository.NotesRepository
 
 class UpdateNote(private val repository: NotesRepository) {
-    suspend operator fun invoke(note: Note){
+    suspend operator fun invoke(note: Note) {
         repository.update(note)
     }
 }

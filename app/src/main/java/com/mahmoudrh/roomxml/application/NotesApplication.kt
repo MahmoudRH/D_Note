@@ -11,7 +11,7 @@ import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 
 @HiltAndroidApp
-class NotesApplication: Application() {
+class NotesApplication : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
