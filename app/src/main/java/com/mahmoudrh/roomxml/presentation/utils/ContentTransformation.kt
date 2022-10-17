@@ -1,43 +1,141 @@
 package com.mahmoudrh.roomxml.presentation.utils
 
+import android.util.Log
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 
-class ContentTransformation(private val editMode: Boolean = true) : VisualTransformation {
+val TAG = "Mah "
+
+class ContentTransformation() : VisualTransformation {
+
     override fun filter(text: AnnotatedString): TransformedText {
         return TransformedText(
-            buildAnnotatedString(text.toString(), editMode = editMode),
+            buildAnnotatedString(text.toString()),
             OffsetMapping.Identity
         )
     }
 
-    private fun buildAnnotatedString(text: String, editMode: Boolean): AnnotatedString {
+    private fun buildAnnotatedString(text: String): AnnotatedString {
         var text_ = text
-        val boldRegex = Regex("\\*[^*]+\\*")
-        val matches = boldRegex.findAll(text_)
-        val boldWordsList = matches.map { it.value }.toList()
-        val builder = AnnotatedString.Builder()
-        boldWordsList.forEach {
-            val boldWordIndex = text_.indexOf(it)
-            val part = text_.substring(0, boldWordIndex)
-            builder.append(part)
-            builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                if (editMode) {
-                    append(it)
-                } else {
-                    val boldWord = it.removeSurrounding("*", "*")
-                    append(boldWord)
-                }
-            }
-            text_ = text_.drop(boldWordIndex).drop(it.length)
+        val allWordsMap = mutableMapOf<String, ContentTransformationHelper>()
+        availableStylesList.forEach { style ->
+            val matches = style.regex.findAll(text_).map { it.value to style }
+            allWordsMap.putAll(matches)
         }
-        if (text_.isNotEmpty())
+        val builder = AnnotatedString.Builder()
+        if (allWordsMap.isEmpty()) {
             builder.append(text_)
+            return builder.toAnnotatedString()
+        }
+        /***Index based sort*/
+        val sortedWordsMap =
+            allWordsMap.toList().sortedBy { (value, _) -> text_.indexOf(value) }.toMap()
+
+        var pointer = 0
+        sortedWordsMap.forEach { (word, style) ->
+            Log.e(
+                TAG,
+                "allWordsMap:[$word], style[${
+                    style.javaClass.name.let {
+                        it.substring(it.lastIndexOf('$'))
+                    }
+                }] "
+            )
+            val wordIndex = text_.indexOf(word)
+            Log.e(TAG, "text_[$text_] ")
+            Log.e(TAG, "wordIndex[$wordIndex]")
+            Log.e(TAG, "pointer[$pointer]")
+            if (wordIndex < 0) {
+                Log.e(TAG, "word not found!!!:"); return@forEach
+            }
+            val part = text_.substring(pointer, wordIndex)
+            builder.append(part)
+
+            val styledWord = word.removeSurrounding(style.prefix, style.suffix)
+            builder.withStyle(style.spanStyle) {
+                Log.e(TAG, "styledWord[$styledWord] ")
+                append(styledWord)
+            }
+            pointer = wordIndex + styledWord.length
+
+            //if the style is applied to the whole text
+            if (wordIndex + word.length == text_.length) pointer = 0
+            Log.e(TAG, "pointer[$pointer]")
+            text_ = text_.replaceRange(
+                startIndex = wordIndex,
+                endIndex = wordIndex + word.length,
+                replacement = styledWord
+            )
+            Log.e(TAG, "text_[$text_], text_.length[${text_.length}] ")
+        }
+        if (pointer != 0)
+            builder.append(text_.substring(pointer))
+//        if (text_.isNotEmpty())
+//            builder.append(text_)
         return builder.toAnnotatedString()
     }
+}
+
+
+fun buildAnnotatedStringFrom(text: String): AnnotatedString {
+    var text_ = text
+    val allWordsMap = mutableMapOf<String, ContentTransformationHelper>()
+    availableStylesList.forEach { style ->
+        val matches = style.regex.findAll(text_).map { it.value to style }
+        allWordsMap.putAll(matches)
+    }
+    val builder = AnnotatedString.Builder()
+    if (allWordsMap.isEmpty()) {
+        builder.append(text_)
+        return builder.toAnnotatedString()
+    }
+    /***Index based sort*/
+    val sortedWordsMap =
+        allWordsMap.toList().sortedBy { (value, _) -> text_.indexOf(value) }.toMap()
+
+    var pointer = 0
+    sortedWordsMap.forEach { (word, style) ->
+        Log.e(
+            TAG,
+            "allWordsMap:[$word], style[${
+                style.javaClass.name.let {
+                    it.substring(it.lastIndexOf('$'))
+                }
+            }] "
+        )
+        val wordIndex = text_.indexOf(word)
+        Log.e(TAG, "text_[$text_] ")
+        Log.e(TAG, "wordIndex[$wordIndex]")
+        Log.e(TAG, "pointer[$pointer]")
+        if (wordIndex < 0) {
+            Log.e(TAG, "word not found!!!:"); return@forEach
+        }
+        val part = text_.substring(pointer, wordIndex)
+        builder.append(part)
+
+        val styledWord = word.removeSurrounding(style.prefix, style.suffix)
+        builder.withStyle(style.spanStyle) {
+            Log.e(TAG, "styledWord[$styledWord] ")
+            append(styledWord)
+        }
+        pointer = wordIndex + styledWord.length
+
+        //if the style is applied to the whole text
+        if (wordIndex + word.length == text_.length) pointer = 0
+        Log.e(TAG, "pointer[$pointer]")
+        text_ = text_.replaceRange(
+            startIndex = wordIndex,
+            endIndex = wordIndex + word.length,
+            replacement = styledWord
+        )
+        Log.e(TAG, "text_[$text_], text_.length[${text_.length}] ")
+    }
+    if (pointer != 0)
+        builder.append(text_.substring(pointer))
+//        if (text_.isNotEmpty())
+//            builder.append(text_)
+    return builder.toAnnotatedString()
 }
