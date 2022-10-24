@@ -8,16 +8,15 @@ import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
 import com.mahmoudrh.roomxml.presentation.screens.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     handle: SavedStateHandle,
-) : ViewModel()
-{
+) : ViewModel() {
     val noteTitle = mutableStateOf("")
     val noteContent = mutableStateOf("")
     val note = handle.navArgs<NoteNavArgs>().note
@@ -47,7 +46,6 @@ class NoteViewModel @Inject constructor(
         isContentEmpty()
     }
 
-
     fun onEvent(event: NoteEvent) {
         checkEmptyFields()
         when (event) {
@@ -65,7 +63,6 @@ class NoteViewModel @Inject constructor(
                         )
                         isEventSuccess.value = true
                     }
-
                 }
             }
             is NoteEvent.UpdateNote -> {
@@ -87,13 +84,12 @@ class NoteViewModel @Inject constructor(
             }
             NoteEvent.ToggleEditMode -> {
                 isEditModeEnabled.value = !isEditModeEnabled.value
-                eventName.value = if (isEditModeEnabled.value) "Editing Note" else  "Viewing Note"
+                eventName.value = if (isEditModeEnabled.value) "Editing Note" else "Viewing Note"
             }
         }
     }
 
-
-    private fun isOriginalNoteModified(ifNoOriginalNote:Boolean) {
+    private fun isOriginalNoteModified(ifNoOriginalNote: Boolean) {
         canDoAction.value = note?.let {
             noteTitle.value != it.title || noteContent.value != it.content
         } ?: ifNoOriginalNote
@@ -116,6 +112,5 @@ class NoteViewModel @Inject constructor(
     }
 
     fun isUpdatingNote() =
-        note != null //if the object passed isn't null, the user is updating an existing note.
-
+        note != null // if the object passed isn't null, the user is updating an existing note.
 }

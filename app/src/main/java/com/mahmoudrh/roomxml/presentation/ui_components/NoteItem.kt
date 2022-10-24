@@ -24,10 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.utils.DateFormatter
-import kotlinx.coroutines.launch
 import java.lang.ArithmeticException
 import kotlin.math.absoluteValue
-
+import kotlinx.coroutines.launch
 
 @Composable
 fun NoteItem(
@@ -92,7 +91,8 @@ fun NoteItem(
                     onLongPress = {
                         isSelected = !isSelected
                         onLongClick()
-                    })
+                    }
+                )
             }
             .draggable(
                 rememberDraggableState(onDelta = { delta ->
@@ -118,7 +118,8 @@ fun NoteItem(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             Divider(
-                color = MaterialTheme.colorScheme.primary, modifier = Modifier
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.2f)
             )
@@ -197,7 +198,8 @@ fun NoteItem(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             Divider(
-                color = MaterialTheme.colorScheme.primary, modifier = Modifier
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.2f)
             )

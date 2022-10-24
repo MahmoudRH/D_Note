@@ -1,8 +1,6 @@
 package com.mahmoudrh.roomxml.presentation.screens.note
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -24,8 +21,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +30,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
-import com.mahmoudrh.roomxml.presentation.utils.ContentTransformation
-import com.mahmoudrh.roomxml.presentation.utils.ContentTransformationHelper
 import com.mahmoudrh.roomxml.presentation.utils.buildAnnotatedStringFrom
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,9 +40,9 @@ private enum class ViewType(val value: Int) {
     EditMode(1)
 }
 
-
 @Destination(navArgsDelegate = NoteNavArgs::class)
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
@@ -63,7 +56,9 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
-        pagerState.animateScrollToPage(if (viewModel.isEditModeEnabled.value) ViewType.EditMode.value else ViewType.ViewOnly.value)
+        pagerState.animateScrollToPage(
+            if (viewModel.isEditModeEnabled.value) ViewType.EditMode.value else ViewType.ViewOnly.value
+        )
     }
 
     Scaffold(
@@ -93,7 +88,9 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
                     } else {
                         viewModel.onEvent(NoteEvent.ToggleEditMode)
                         scope.launch {
-                            pagerState.animateScrollToPage(if (viewModel.isEditModeEnabled.value) ViewType.EditMode.value else ViewType.ViewOnly.value)
+                            pagerState.animateScrollToPage(
+                                if (viewModel.isEditModeEnabled.value) ViewType.EditMode.value else ViewType.ViewOnly.value
+                            )
                         }
                     }
                 },
@@ -125,7 +122,6 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
             .show()
         navigator.popBackStack()
     }
-
 }
 
 data class NoteNavArgs(val note: Note?)
@@ -159,7 +155,7 @@ fun EditingNote(viewModel: NoteViewModel) {
 }
 
 @Composable
-fun ViewingNote(title:String, content:String) {
+fun ViewingNote(title: String, content: String) {
     Column {
         Text(
             modifier = Modifier

@@ -20,7 +20,6 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
-
 @RootNavGraph(start = true)
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,8 +42,8 @@ fun AllNotesScreen(
             FloatingActionButton(onClick = { navigator.navigate(NoteScreenDestination.route) }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "New Note")
             }
-        }, snackbarHost = { SnackbarHost(snackBarHostState) })
-    { paddingValues ->
+        }, snackbarHost = { SnackbarHost(snackBarHostState) }
+    ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,7 +96,6 @@ fun AllNotesScreen(
                         }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
                             Text(text = "Delete All")
                         }
-
                     }
                 }
             }
@@ -124,7 +122,6 @@ fun AllNotesScreen(
                         }
                     }
                 )
-
             }
         }
         EmptyListScreen(visibility = notesState.isListEmpty, text = "Add Some Notes!")

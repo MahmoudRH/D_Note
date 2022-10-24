@@ -22,7 +22,6 @@ object AppModule {
         return Room.databaseBuilder(app, NotesDB::class.java, NotesDB.DATABASE_NAME).build()
     }
 
-
     @Provides
     @Singleton
     fun provideNoteRepository(database: NotesDB): NotesRepository {

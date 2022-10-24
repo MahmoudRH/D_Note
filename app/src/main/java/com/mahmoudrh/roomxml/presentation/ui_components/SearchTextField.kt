@@ -69,7 +69,8 @@ fun SearchTextField(
                             searchWord.value = " "
                             // I Had to put the space and trim it in the view model to avoid crash caused by
                             // BasicTextField (https://issuetracker.google.com/issues/229378536)
-                        }) {
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Cancel,
                             contentDescription = "Clear"

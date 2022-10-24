@@ -1,6 +1,5 @@
 package com.mahmoudrh.roomxml.presentation.ui_components
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahmoudrh.roomxml.domain.utils.OrderBy
 import com.mahmoudrh.roomxml.domain.utils.OrderType
-
 
 @Preview
 @Composable
@@ -32,7 +30,8 @@ fun OrderSection(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             Divider(
-                color = MaterialTheme.colorScheme.primary, modifier = Modifier
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.2f)
             )
@@ -82,7 +81,6 @@ fun OrderSection(
             }
         }
     }
-
 }
 
 @Composable
@@ -93,5 +91,4 @@ fun DefaultRadioButton(text: String, selected: Boolean, onSelect: () -> Unit) {
         Spacer(modifier = Modifier.width(4.dp))
         RadioButton(selected = selected, onClick = onSelect)
     }
-
 }

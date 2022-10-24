@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.devtools.ksp' version '1.7.20-1.0.7'
+    id "org.jlleitschuh.gradle.ktlint" version "$ktlint_version"
 }
 
 android {
@@ -53,6 +54,17 @@ android {
                 kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
             }
         }
+    }
+}
+
+ktlint {
+    android = true
+    ignoreFailures = true
+    disabledRules = ["final-newline", "no-wildcard-imports"]
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
     }
 }
 

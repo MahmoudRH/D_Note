@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(

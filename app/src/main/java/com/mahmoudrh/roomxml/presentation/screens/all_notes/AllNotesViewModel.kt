@@ -11,11 +11,11 @@ import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
 import com.mahmoudrh.roomxml.domain.utils.OrderBy
 import com.mahmoudrh.roomxml.domain.utils.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -96,7 +96,6 @@ class AllNotesViewModel @Inject constructor(
                     isSelectionModeEnabled.value = false
                     selectedNotes.clear()
                 }
-
             }
             AllNotesEvent.DeleteSelectedNotes -> {
                 viewModelScope.launch {

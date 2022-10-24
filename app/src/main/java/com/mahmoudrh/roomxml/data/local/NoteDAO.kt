@@ -24,6 +24,4 @@ interface NoteDAO {
 
     @Query("SELECT * FROM notes WHERE title LIKE '%' || :searchWord || '%'")
     fun searchNotes(searchWord: String? = null): Flow<List<Note>>
-
-
 }

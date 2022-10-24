@@ -11,5 +11,4 @@ sealed class AllNotesEvent {
     object DeleteAllNotes : AllNotesEvent()
     object RestoreNote : AllNotesEvent()
     object ToggleOrderSection : AllNotesEvent()
-
 }

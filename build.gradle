@@ -5,6 +5,7 @@ buildscript {
         accompanist_version = '0.26.5-rc'
         room_version = '2.4.3'
         nav_destinations_version = '1.7.22-beta'
+        ktlint_version = '11.0.0'
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"

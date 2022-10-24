@@ -1,6 +1,5 @@
 package com.mahmoudrh.roomxml.presentation.ui_components
 
-
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -20,7 +19,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-
 
 object AppTopBars {
 
@@ -49,7 +47,7 @@ object AppTopBars {
                 AnimatedVisibility(
                     visible = actionIconVisibility,
                     enter = expandIn(expandFrom = Alignment.Center),
-                    exit =  fadeOut(tween(200))
+                    exit = fadeOut(tween(200))
                 ) {
                     Row(
                         modifier = Modifier
@@ -118,7 +116,7 @@ object AppTopBars {
                 IconButton(onClick = onNavigateBack) {
                     Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
-            })
+            }
+        )
     }
-
 }
