@@ -27,7 +27,7 @@ The App is built with ~~XML~~ [Jetpack-Compose](https://developer.android.com/je
 ## Features:
  - View All Notes
  - Adding a Note.
- - Updateing a Note.
+ - Updating a Note.
  - Swipe to Delete a Note.
  - Undo Deletion.
  - Search Notes. 
