@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoudrh.roomxml.R
+import com.mahmoudrh.roomxml.domain.models.Note
+import com.mahmoudrh.roomxml.domain.utils.OrderBy
 import com.mahmoudrh.roomxml.presentation.ui_components.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -33,29 +36,66 @@ fun AllNotesScreen(
     navigator: DestinationsNavigator
 ) {
     val notesState = viewModel.notesState.value
-    val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    AllNotesUI(
+        notesState = notesState,
+        onClickSearch = { navigator.navigate(SearchScreenDestination) },
+        { navigator.navigate(NoteScreenDestination(null)) },
+        { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) },
+        { viewModel.onEvent(AllNotesEvent.Order(it)) },
+        { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) },
+        {
+            viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
+        },
+        { navigator.navigate(NoteScreenDestination(it)) },
+        {
+            viewModel.onEvent(AllNotesEvent.SelectNote(it))
+        }
+    ) {
+        viewModel.onEvent(AllNotesEvent.DeleteNote(it))
+        scope.launch {
+            val result = notesState.snackbarHostState.showSnackbar(
+                message = context.getString(R.string.note_deleted),
+                actionLabel = context.getString(R.string.undo)
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.onEvent(AllNotesEvent.RestoreNote)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AllNotesUI(
+    notesState: NotesState,
+    onClickSearch: () -> Unit,
+    onClickAdd: () -> Unit,
+    onClickOrder: () -> Unit,
+    onOrderChanged: (OrderBy) -> Unit,
+    onClickDeleteSelectedNote: () -> Unit,
+    onClickDeleteAll: () -> Unit,
+    onClickNoteItem: (Note) -> Unit,
+    onLongClickNote: (Note) -> Unit,
+    onSwipeNoteOut: (Note) -> Unit,
+) {
     Scaffold(
         topBar = {
             AppTopBars.DefaultTopBar(
                 title = stringResource(R.string.d_note),
-                actionIcon = Icons.Default.Search
-            ) {
-                navigator.navigate(
-                    SearchScreenDestination
-                )
-            }
+                actionIcon = Icons.Default.Search,
+                onActionClick = onClickSearch
+            )
         },
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
         floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(NoteScreenDestination(null)) }) {
+            FloatingActionButton(onClick = onClickAdd) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = stringResource(R.string.new_note)
                 )
             }
-        }, snackbarHost = { SnackbarHost(snackBarHostState) }
+        }, snackbarHost = { SnackbarHost(notesState.snackbarHostState) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -73,7 +113,7 @@ fun AllNotesScreen(
                     Text(
                         text = stringResource(R.string.sort),
                     )
-                    IconButton(onClick = { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) }) {
+                    IconButton(onClick = onClickOrder) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Sort,
                             contentDescription = stringResource(R.string.sort)
@@ -87,15 +127,13 @@ fun AllNotesScreen(
                 ) {
                     OrderSection(
                         order = notesState.order,
-                        onOrderChange = {
-                            viewModel.onEvent(AllNotesEvent.Order(it))
-                        }
+                        onOrderChange = onOrderChanged
                     )
                 }
             }
             item {
                 AnimatedVisibility(
-                    visible = viewModel.isSelectionModeEnabled.value,
+                    visible = notesState.isSelectionModeEnabled,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
@@ -104,12 +142,13 @@ fun AllNotesScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        Button(onClick = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) }) {
+                        Button(onClick = onClickDeleteSelectedNote) {
                             Text(text = stringResource(R.string.delete_selected))
                         }
-                        Button(onClick = {
-                            viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
-                        }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
+                        Button(
+                            onClick = onClickDeleteAll,
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                        ) {
                             Text(text = stringResource(R.string.delete_all))
                         }
                     }
@@ -120,23 +159,10 @@ fun AllNotesScreen(
                 NoteItem(
                     modifier = Modifier.padding(vertical = 8.dp),
                     note = it,
-                    isSelectionModeEnabled = viewModel.isSelectionModeEnabled,
-                    onClick = { navigator.navigate(NoteScreenDestination(it)) },
-                    onLongClick = {
-                        viewModel.onEvent(AllNotesEvent.SelectNote(it))
-                    },
-                    onSwipeOut = {
-                        viewModel.onEvent(AllNotesEvent.DeleteNote(it))
-                        scope.launch {
-                            val result = snackBarHostState.showSnackbar(
-                                message = context.getString(R.string.note_deleted),
-                                actionLabel = context.getString(R.string.undo)
-                            )
-                            if (result == SnackbarResult.ActionPerformed) {
-                                viewModel.onEvent(AllNotesEvent.RestoreNote)
-                            }
-                        }
-                    }
+                    isSelectionModeEnabled = notesState.isSelectionModeEnabled,
+                    onClick = { onClickNoteItem(it) },
+                    onLongClick = { onLongClickNote(it) },
+                    onSwipeOut = { onSwipeNoteOut(it) }
                 )
             }
         }
@@ -146,4 +172,31 @@ fun AllNotesScreen(
         )
         LoadingScreen(visibility = notesState.isListLoading)
     }
+}
+
+@Preview
+@Composable
+private fun NotesScreenPreview() {
+    AllNotesUI(
+        notesState = NotesState(
+            isListLoading = false,
+            notes = listOf(
+                Note(
+                    id = 1,
+                    title = "Title",
+                    content = "Content",
+                    date = System.currentTimeMillis().toString()
+                )
+            )
+        ),
+        onClickSearch = {},
+        onClickAdd = {},
+        onClickOrder = {},
+        onOrderChanged = {},
+        onClickDeleteSelectedNote = {},
+        onClickDeleteAll = {},
+        onClickNoteItem = {},
+        onLongClickNote = {},
+        onSwipeNoteOut = {}
+    )
 }

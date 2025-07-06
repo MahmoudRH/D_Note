@@ -29,7 +29,6 @@ class AllNotesViewModel @Inject constructor(
     private val preferences =
         application.getSharedPreferences("OrderPreferences", Context.MODE_PRIVATE)
     val selectedNotes: MutableList<Note> = mutableListOf()
-    val isSelectionModeEnabled = mutableStateOf<Boolean>(false)
 
     init {
         val ob = preferences.getInt("OrderBy", OrderBy.DATE)
@@ -87,13 +86,12 @@ class AllNotesViewModel @Inject constructor(
                 } else {
                     selectedNotes.add(event.note)
                 }
-
-                isSelectionModeEnabled.value = selectedNotes.isNotEmpty()
+                _notesState.value = notesState.value.copy( isSelectionModeEnabled = selectedNotes.isNotEmpty())
             }
             AllNotesEvent.DeleteAllNotes -> {
                 viewModelScope.launch {
                     noteUseCases.deleteAllNotes()
-                    isSelectionModeEnabled.value = false
+                    _notesState.value = notesState.value.copy( isSelectionModeEnabled = false)
                     selectedNotes.clear()
                 }
             }
@@ -102,7 +100,7 @@ class AllNotesViewModel @Inject constructor(
                     selectedNotes.forEach {
                         noteUseCases.deleteNote(it)
                     }
-                    isSelectionModeEnabled.value = false
+                    _notesState.value = notesState.value.copy( isSelectionModeEnabled = false)
                     selectedNotes.clear()
                 }
             }

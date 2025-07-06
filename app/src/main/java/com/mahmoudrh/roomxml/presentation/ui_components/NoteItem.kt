@@ -32,15 +32,15 @@ import kotlinx.coroutines.launch
 fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
-    isSelectionModeEnabled: MutableState<Boolean>,
+    isSelectionModeEnabled: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onSwipeOut: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
-    var offsetX by mutableStateOf(0f)
-    var alpha by mutableStateOf(0f)
+    var offsetX by  remember { mutableFloatStateOf(0f) }
+    var alpha by remember { mutableFloatStateOf(0f) }
     val vanishOffsetRight = remember { Animatable(250f) }
     val vanishOffsetLeft = remember { Animatable(-250f) }
 
@@ -82,7 +82,7 @@ fun NoteItem(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        if (isSelectionModeEnabled.value) {
+                        if (isSelectionModeEnabled) {
                             isSelected = !isSelected
                             onLongClick()
                         } else
