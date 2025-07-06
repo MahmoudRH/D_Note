@@ -26,9 +26,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
+import com.mahmoudrh.roomxml.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -66,14 +68,14 @@ fun SearchTextField(
                     IconButton(
                         modifier = Modifier.align(Alignment.CenterEnd),
                         onClick = {
-                            searchWord.value = " "
+                            searchWord.value = ""
                             // I Had to put the space and trim it in the view model to avoid crash caused by
                             // BasicTextField (https://issuetracker.google.com/issues/229378536)
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Cancel,
-                            contentDescription = "Clear"
+                            contentDescription = stringResource(R.string.clear)
                         )
                     }
                     innerTextField()

@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
 import com.mahmoudrh.roomxml.presentation.ui_components.EmptyListScreen
 import com.mahmoudrh.roomxml.presentation.ui_components.LoadingScreen
@@ -56,7 +58,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navigator: Destin
             }
             EmptyListScreen(
                 visibility = viewModel.isResultsListEmpty.value,
-                text = "Sorry, We Couldn't Find Any Results.. ",
+                text = stringResource(R.string.sorry_we_couldn_t_find_any_results),
                 fontSize = 20.sp
             )
             LoadingScreen(visibility = viewModel.isLoading.value)

@@ -1,9 +1,11 @@
 package com.mahmoudrh.roomxml.presentation.screens.note
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
 import com.ramcosta.composedestinations.generated.navArgs
@@ -23,12 +25,12 @@ class NoteViewModel @Inject constructor(
     val isTitleError = mutableStateOf(false)
     val isContentError = mutableStateOf(false)
     val isEventSuccess = mutableStateOf(false)
-    val eventName = mutableStateOf("Adding New Note")
+    val eventName = mutableIntStateOf(R.string.adding_new_note)
     val canDoAction = mutableStateOf<Boolean>(false)
     val isEditModeEnabled = mutableStateOf<Boolean>(true)
     init {
         note?.let {
-            eventName.value = "Viewing Note"
+            eventName.intValue = R.string.viewing_note
             noteTitle.value = it.title
             noteContent.value = it.content
             isEditModeEnabled.value = false
@@ -84,7 +86,7 @@ class NoteViewModel @Inject constructor(
             }
             NoteEvent.ToggleEditMode -> {
                 isEditModeEnabled.value = !isEditModeEnabled.value
-                eventName.value = if (isEditModeEnabled.value) "Editing Note" else "Viewing Note"
+                eventName.intValue = if (isEditModeEnabled.value) R.string.editing_note else R.string.viewing_note
             }
         }
     }

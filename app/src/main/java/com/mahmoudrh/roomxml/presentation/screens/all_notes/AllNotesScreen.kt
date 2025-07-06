@@ -11,8 +11,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.presentation.ui_components.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -32,17 +35,25 @@ fun AllNotesScreen(
     val notesState = viewModel.notesState.value
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     Scaffold(
         topBar = {
-            AppTopBars.DefaultTopBar(title = "D Note", actionIcon = Icons.Default.Search) {
+            AppTopBars.DefaultTopBar(
+                title = stringResource(R.string.d_note),
+                actionIcon = Icons.Default.Search
+            ) {
                 navigator.navigate(
-                    SearchScreenDestination)
+                    SearchScreenDestination
+                )
             }
         },
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = { navigator.navigate(NoteScreenDestination(null)) }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "New Note")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.new_note)
+                )
             }
         }, snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { paddingValues ->
@@ -60,10 +71,13 @@ fun AllNotesScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Sort ",
+                        text = stringResource(R.string.sort),
                     )
                     IconButton(onClick = { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) }) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Sort,
+                            contentDescription = stringResource(R.string.sort)
+                        )
                     }
                 }
                 AnimatedVisibility(
@@ -91,12 +105,12 @@ fun AllNotesScreen(
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
                         Button(onClick = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) }) {
-                            Text(text = "Delete Selected")
+                            Text(text = stringResource(R.string.delete_selected))
                         }
                         Button(onClick = {
                             viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
                         }, colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)) {
-                            Text(text = "Delete All")
+                            Text(text = stringResource(R.string.delete_all))
                         }
                     }
                 }
@@ -115,8 +129,8 @@ fun AllNotesScreen(
                         viewModel.onEvent(AllNotesEvent.DeleteNote(it))
                         scope.launch {
                             val result = snackBarHostState.showSnackbar(
-                                message = "Note deleted",
-                                actionLabel = "Undo"
+                                message = context.getString(R.string.note_deleted),
+                                actionLabel = context.getString(R.string.undo)
                             )
                             if (result == SnackbarResult.ActionPerformed) {
                                 viewModel.onEvent(AllNotesEvent.RestoreNote)
@@ -126,7 +140,10 @@ fun AllNotesScreen(
                 )
             }
         }
-        EmptyListScreen(visibility = notesState.isListEmpty, text = "Add Some Notes!")
+        EmptyListScreen(
+            visibility = notesState.isListEmpty,
+            text = stringResource(R.string.add_some_notes)
+        )
         LoadingScreen(visibility = notesState.isListLoading)
     }
 }

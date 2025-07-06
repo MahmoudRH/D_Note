@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
 import com.mahmoudrh.roomxml.presentation.utils.buildAnnotatedStringFrom
@@ -51,7 +53,8 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
 
     val eventName = viewModel.eventName
     val icon = if (viewModel.isEditModeEnabled.value) Icons.Default.Check else Icons.Default.Edit
-    val text = if (viewModel.isEditModeEnabled.value) "Save" else "Edit"
+    val text =
+        if (viewModel.isEditModeEnabled.value) stringResource(R.string.save) else stringResource(R.string.edit)
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -65,7 +68,7 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     Scaffold(
         topBar = {
             AppTopBars.DefaultTopBar(
-                title = eventName.value,
+                title = stringResource(eventName.intValue),
                 onNavigateBack = {
                     if (viewModel.isEditModeEnabled.value) {
                         viewModel.onEvent(NoteEvent.ToggleEditMode)
@@ -109,8 +112,12 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
         ) { page ->
             when (page) {
                 ViewType.ViewOnly.value -> {
-                    ViewingNote(title = viewModel.noteTitle.value, content = viewModel.noteContent.value)
+                    ViewingNote(
+                        title = viewModel.noteTitle.value,
+                        content = viewModel.noteContent.value
+                    )
                 }
+
                 ViewType.EditMode.value -> {
                     EditingNote(viewModel = viewModel)
                 }
@@ -119,7 +126,10 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     }
 
     if (viewModel.isEventSuccess.value) {
-        Toast.makeText(LocalContext.current, "${eventName.value} Success", Toast.LENGTH_SHORT)
+        Toast.makeText(
+            LocalContext.current,
+            stringResource(R.string.success, eventName.value), Toast.LENGTH_SHORT
+        )
             .show()
         navigator.popBackStack()
     }
@@ -136,9 +146,9 @@ fun EditingNote(viewModel: NoteViewModel) {
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.noteTitle.value,
             onValueChange = { viewModel.onTitleChange(it) },
-            label = { Text(text = "Title") },
+            label = { Text(text = stringResource(R.string.title)) },
             singleLine = true,
-            placeholder = { Text(text = "Add a title...") },
+            placeholder = { Text(text = stringResource(R.string.add_a_title)) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
             isError = viewModel.isTitleError.value
@@ -148,8 +158,8 @@ fun EditingNote(viewModel: NoteViewModel) {
             modifier = Modifier.fillMaxSize(),
             value = viewModel.noteContent.value,
             onValueChange = { viewModel.onContentChange(it) },
-            label = { Text(text = "Content") },
-            placeholder = { Text(text = "Add some content...") },
+            label = { Text(text = stringResource(R.string.content)) },
+            placeholder = { Text(text = stringResource(R.string.add_some_content)) },
             isError = viewModel.isContentError.value,
         )
     }

@@ -8,7 +8,30 @@
     <string name="dialog_positive">Send</string>
     <string name="dialog_negative">Don\'t Send</string>
     <string name="dialog_comment">You can add a comment here:</string>
-<!-- END: crash dialog values:  -->
+    <string name="sorry_we_couldn_t_find_any_results">"Sorry, We Couldn't Find Any Results.. "</string>
+    <string name="add_some_content">Add some content...</string>
+    <string name="content">Content</string>
+    <string name="add_a_title">Add a title...</string>
+    <string name="title">Title</string>
+    <string name="success">%1$s Success</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_all">Delete All</string>
+    <string name="sort">"Sort "</string>
+    <string name="d_note">D Note</string>
+    <string name="new_note">New Note</string>
+    <string name="undo">Undo</string>
+    <string name="note_deleted">Note deleted</string>
+    <string name="add_some_notes">Add Some Notes!</string>
+    <string name="note">%1$s Note</string>
+    <string name="sort_by">"Sort By: "</string>
+    <string name="date">Date</string>
+    <string name="clear">Clear</string>
+    <string name="adding_new_note">Adding New Note</string>
+    <string name="viewing_note">Viewing Note</string>
+    <string name="editing_note">Editing Note</string>
+    <!-- END: crash dialog values:  -->
 
 
 </resources>

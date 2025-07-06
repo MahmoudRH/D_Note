@@ -7,8 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.utils.OrderBy
 import com.mahmoudrh.roomxml.domain.utils.OrderType
 
@@ -45,14 +47,14 @@ fun OrderSection(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Sort By: ")
+                    Text(text = stringResource(R.string.sort_by))
                     DefaultRadioButton(
-                        text = "Title",
+                        text = stringResource(R.string.title),
                         selected = order is OrderBy.Title,
                         onSelect = { onOrderChange(OrderBy.Title(order.orderType)) }
                     )
                     DefaultRadioButton(
-                        text = "Date",
+                        text = stringResource(R.string.date),
                         selected = order is OrderBy.Date,
                         onSelect = { onOrderChange(OrderBy.Date(order.orderType)) }
                     )

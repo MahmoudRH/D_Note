@@ -19,7 +19,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mahmoudrh.roomxml.R
 
 object AppTopBars {
 
@@ -59,7 +61,10 @@ object AppTopBars {
                             .padding(vertical = 5.dp, horizontal = 5.dp)
 
                     ) {
-                        Icon(imageVector = actionIcon, contentDescription = "$actionText Note")
+                        Icon(imageVector = actionIcon, contentDescription = stringResource(
+                            R.string.note,
+                            actionText
+                        ))
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(text = actionText)
                     }
