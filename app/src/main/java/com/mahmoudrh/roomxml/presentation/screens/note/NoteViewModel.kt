@@ -15,7 +15,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class NoteViewModel @Inject constructor(
+open class NoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     handle: SavedStateHandle,
 ) : ViewModel() {

@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mahmoudrh.roomxml.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 object AppTopBars {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun DefaultTopBar(
         title: String,
@@ -73,7 +73,6 @@ object AppTopBars {
         )
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun DefaultTopBar(
         title: String,
@@ -94,7 +93,6 @@ object AppTopBars {
         )
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SearchTopBar(
         onNavigateBack: () -> Unit = {},
