@@ -2,6 +2,8 @@ package com.mahmoudrh.roomxml.presentation.screens.note
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,9 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
@@ -45,8 +44,7 @@ private enum class ViewType(val value: Int) {
 
 @Destination<RootGraph>(navArgs = NoteNavArgs::class)
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class
 )
 @Composable
 fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: DestinationsNavigator) {
@@ -55,7 +53,7 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     val icon = if (viewModel.isEditModeEnabled.value) Icons.Default.Check else Icons.Default.Edit
     val text =
         if (viewModel.isEditModeEnabled.value) stringResource(R.string.save) else stringResource(R.string.edit)
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { 2 }
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -72,10 +70,15 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
                 onNavigateBack = {
                     if (viewModel.isEditModeEnabled.value) {
                         viewModel.onEvent(NoteEvent.ToggleEditMode)
-                        scope.launch {
-                            pagerState.animateScrollToPage(ViewType.ViewOnly.value)
+                        if (viewModel.note != null) {
+                            scope.launch {
+                                //add check for null, else popBackStack
+                                pagerState.animateScrollToPage(ViewType.ViewOnly.value)
+                            }
+                            keyboardController?.hide()
+                        } else {
+                            navigator.popBackStack()
                         }
-                        keyboardController?.hide()
                     } else {
                         navigator.popBackStack()
                     }
@@ -107,7 +110,6 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
                 .padding(paddingValues)
                 .padding(horizontal = 20.dp, vertical = 10.dp),
             state = pagerState,
-            count = 2,
             userScrollEnabled = false,
         ) { page ->
             when (page) {
@@ -128,7 +130,7 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     if (viewModel.isEventSuccess.value) {
         Toast.makeText(
             LocalContext.current,
-            stringResource(R.string.success, eventName.value), Toast.LENGTH_SHORT
+            stringResource(R.string.success, eventName.intValue), Toast.LENGTH_SHORT
         )
             .show()
         navigator.popBackStack()

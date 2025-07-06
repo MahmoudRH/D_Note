@@ -90,8 +90,6 @@ dependencies {
     //-> ViewModel utilities for Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1"
 
-    //-> Accompanist Pager Library
-    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
     //-> Hilt DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
