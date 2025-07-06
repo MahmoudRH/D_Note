@@ -13,15 +13,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mahmoudrh.roomxml.presentation.screens.destinations.NoteScreenDestination
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
 import com.mahmoudrh.roomxml.presentation.ui_components.EmptyListScreen
 import com.mahmoudrh.roomxml.presentation.ui_components.LoadingScreen
 import com.mahmoudrh.roomxml.presentation.ui_components.NoteItem
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.NoteScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navigator: DestinationsNavigator) {
     val focusRequester = FocusRequester()

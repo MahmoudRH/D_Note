@@ -32,6 +32,7 @@ import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
 import com.mahmoudrh.roomxml.presentation.utils.buildAnnotatedStringFrom
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ private enum class ViewType(val value: Int) {
     EditMode(1)
 }
 
-@Destination(navArgsDelegate = NoteNavArgs::class)
+@Destination<RootGraph>(navArgs = NoteNavArgs::class)
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalPagerApi::class,
     ExperimentalComposeUiApi::class
@@ -168,7 +169,7 @@ fun ViewingNote(title: String, content: String) {
             overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.size(8.dp))
-        Divider()
+        HorizontalDivider()
         Spacer(modifier = Modifier.size(8.dp))
         Text(
             modifier = Modifier

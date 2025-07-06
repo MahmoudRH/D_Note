@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -40,7 +41,7 @@ object AppTopBars {
             ),
             navigationIcon = {
                 IconButton(onClick = onNavigateBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                 }
             },
             actions = {
@@ -97,7 +98,7 @@ object AppTopBars {
         hint: String,
         focusRequester: FocusRequester
     ) {
-        SmallTopAppBar(
+        TopAppBar(
             modifier = Modifier.shadow(elevation = 8.dp),
             title = {
                 SearchTextField(

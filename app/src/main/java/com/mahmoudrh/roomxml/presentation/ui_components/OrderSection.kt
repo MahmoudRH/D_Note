@@ -29,11 +29,11 @@ fun OrderSection(
                 .height(IntrinsicSize.Min)
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Divider(
-                color = MaterialTheme.colorScheme.primary,
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.2f)
+                    .background(MaterialTheme.colorScheme.primary)
             )
             Column(
                 modifier = Modifier

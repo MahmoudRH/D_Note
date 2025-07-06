@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
-import com.mahmoudrh.roomxml.presentation.screens.navArgs
+import com.ramcosta.composedestinations.generated.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject

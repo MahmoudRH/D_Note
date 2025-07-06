@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,16 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mahmoudrh.roomxml.presentation.screens.destinations.NoteScreenDestination
-import com.mahmoudrh.roomxml.presentation.screens.destinations.SearchScreenDestination
 import com.mahmoudrh.roomxml.presentation.ui_components.*
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.NoteScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.SearchScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
-@RootNavGraph(start = true)
-@Destination
+@RootGraph()
+@Destination<RootGraph>(start = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllNotesScreen(
@@ -34,12 +35,13 @@ fun AllNotesScreen(
     Scaffold(
         topBar = {
             AppTopBars.DefaultTopBar(title = "D Note", actionIcon = Icons.Default.Search) {
-                navigator.navigate(SearchScreenDestination)
+                navigator.navigate(
+                    SearchScreenDestination)
             }
         },
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
         floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(NoteScreenDestination.route) }) {
+            FloatingActionButton(onClick = { navigator.navigate(NoteScreenDestination(null)) }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "New Note")
             }
         }, snackbarHost = { SnackbarHost(snackBarHostState) }
@@ -61,7 +63,7 @@ fun AllNotesScreen(
                         text = "Sort ",
                     )
                     IconButton(onClick = { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) }) {
-                        Icon(imageVector = Icons.Default.Sort, contentDescription = "Sort")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.Sort, contentDescription = "Sort")
                     }
                 }
                 AnimatedVisibility(
