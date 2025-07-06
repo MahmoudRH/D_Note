@@ -1,32 +1,55 @@
 package com.mahmoudrh.roomxml.presentation.ui_components
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.utils.DateFormatter
-import java.lang.ArithmeticException
-import kotlin.math.absoluteValue
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @Composable
 fun NoteItem(
@@ -39,75 +62,80 @@ fun NoteItem(
 ) {
     val scope = rememberCoroutineScope()
 
-    var offsetX by  remember { mutableFloatStateOf(0f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
     var alpha by remember { mutableFloatStateOf(0f) }
-    val vanishOffsetRight = remember { Animatable(250f) }
-    val vanishOffsetLeft = remember { Animatable(-250f) }
-
     var isSelected by remember { mutableStateOf(note.isSelected) }
+
     fun resetOffset() {
         scope.launch {
-            val resetOffset = Animatable(offsetX)
-            resetOffset.animateTo(0f, tween(180)) { offsetX = value }
+            Animatable(offsetX).animateTo(
+                targetValue = 0f,
+                animationSpec = tween(durationMillis = 180)
+            ) { offsetX = value }
         }
     }
 
     fun swipeOut() {
         scope.launch {
-            launch {
-                val vanishAlpha = Animatable(0.3f)
-                vanishAlpha.animateTo(1f, tween(80)) { alpha = value }
+            // Fade out while swiping
+            val fadeOut = launch {
+                Animatable(0.3f).animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(80)
+                ) { alpha = value }
             }
-            launch {
-                if (offsetX > 0)
-                    vanishOffsetRight.animateTo(1030f, tween(80)) { offsetX = value }
-                else
-                    vanishOffsetLeft.animateTo(-1050f, tween(80)) { offsetX = value }
+
+            // Slide off-screen
+            val vanishAnim = Animatable(offsetX)
+            val targetOffset = if (offsetX > 0) 1030f else -1050f
+
+            val slideOut = launch {
+                vanishAnim.animateTo(
+                    targetValue = targetOffset,
+                    animationSpec = tween(80)
+                ) { offsetX = value }
             }
-        }.invokeOnCompletion {
+
+            fadeOut.join()
+            slideOut.join()
+
             onSwipeOut()
         }
     }
+
     Card(
         modifier = modifier
             .graphicsLayer {
-                alpha = try {
-                    (offsetX) / 1000
-                } catch (e: ArithmeticException) {
-                    1f
-                }
                 this.alpha = (1f - alpha.absoluteValue).coerceIn(0f, 1f)
-                this.translationX = offsetX
+                translationX = offsetX
             }
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        if (isSelectionModeEnabled) {
-                            isSelected = !isSelected
-                            onLongClick()
-                        } else
-                            onClick()
-                    },
-                    onLongPress = {
+            .combinedClickable(
+                onClick = {
+                    if (isSelectionModeEnabled) {
                         isSelected = !isSelected
                         onLongClick()
+                    } else {
+                        onClick()
                     }
-                )
-            }
+                },
+                onLongClick = {
+                    isSelected = !isSelected
+                    onLongClick()
+                }
+            )
             .draggable(
-                rememberDraggableState(onDelta = { delta ->
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
                     offsetX += delta
-                }),
+                },
                 onDragStopped = { velocity ->
                     if (velocity.absoluteValue < 2000) {
                         resetOffset()
                     } else {
                         swipeOut()
                     }
-                },
-                orientation = Orientation.Horizontal
-            )
-            .wrapContentSize(),
+                }
+            ),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(4.dp)
     ) {
@@ -123,6 +151,7 @@ fun NoteItem(
                     .weight(0.2f)
                     .background(MaterialTheme.colorScheme.primary)
             )
+
             AnimatedVisibility(
                 visible = isSelected,
                 enter = expandHorizontally(),
@@ -165,6 +194,7 @@ fun NoteItem(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+
             Text(
                 modifier = Modifier
                     .weight(2f)
@@ -197,11 +227,11 @@ fun NoteItem(
                 .height(IntrinsicSize.Min)
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Divider(
-                color = MaterialTheme.colorScheme.primary,
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.2f)
+                    .background(MaterialTheme.colorScheme.primary)
             )
             Column(
                 modifier = Modifier
@@ -235,4 +265,33 @@ fun NoteItem(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NoteItemFullPreview() {
+    NoteItem(
+        note = Note(
+            title = "Title",
+            content = "Content",
+            date = System.currentTimeMillis().toString()
+        ),
+        isSelectionModeEnabled = true,
+        onClick = {},
+        onLongClick = {},
+        onSwipeOut = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NoteItemSimplePreview() {
+    NoteItem(
+        note = Note(
+            title = "Compose FTW",
+            content = "Previewing the simple note item without swipe or selection.",
+            date = System.currentTimeMillis().toString()
+        ),
+        onClick = {}
+    )
 }
