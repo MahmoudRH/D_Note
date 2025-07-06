@@ -1,7 +1,14 @@
 package com.mahmoudrh.roomxml.presentation.screens.note
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -12,7 +19,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +49,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
-import com.mahmoudrh.roomxml.presentation.utils.buildAnnotatedStringFrom
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -229,7 +239,7 @@ private fun ViewingNote(title: String, content: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 10.dp),
-            text = buildAnnotatedStringFrom(title),
+            text = title,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             maxLines = 1,
@@ -243,7 +253,7 @@ private fun ViewingNote(title: String, content: String) {
                 .fillMaxSize()
                 .padding(vertical = 10.dp)
                 .verticalScroll(rememberScrollState()),
-            text = buildAnnotatedStringFrom(content),
+            text = content,
         )
     }
 }
