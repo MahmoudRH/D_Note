@@ -130,7 +130,7 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
     if (viewModel.isEventSuccess.value) {
         Toast.makeText(
             LocalContext.current,
-            stringResource(R.string.success, eventName.intValue), Toast.LENGTH_SHORT
+            stringResource(R.string.success, stringResource(eventName.intValue)), Toast.LENGTH_SHORT
         )
             .show()
         navigator.popBackStack()

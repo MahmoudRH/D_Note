@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 
 @RootGraph()
 @Destination<RootGraph>(start = true)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllNotesScreen(
     viewModel: AllNotesViewModel = hiltViewModel(),
@@ -41,17 +40,13 @@ fun AllNotesScreen(
     AllNotesUI(
         notesState = notesState,
         onClickSearch = { navigator.navigate(SearchScreenDestination) },
-        { navigator.navigate(NoteScreenDestination(null)) },
-        { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) },
-        { viewModel.onEvent(AllNotesEvent.Order(it)) },
-        { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) },
-        {
-            viewModel.onEvent(AllNotesEvent.DeleteAllNotes)
-        },
-        { navigator.navigate(NoteScreenDestination(it)) },
-        {
-            viewModel.onEvent(AllNotesEvent.SelectNote(it))
-        }
+        onClickAdd = { navigator.navigate(NoteScreenDestination(null)) },
+        onClickOrder = { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) },
+        onOrderChanged = { viewModel.onEvent(AllNotesEvent.Order(it)) },
+        onClickDeleteSelectedNote = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) },
+        onClickDeleteAll = { viewModel.onEvent(AllNotesEvent.DeleteAllNotes) },
+        onClickNoteItem = { navigator.navigate(NoteScreenDestination(it)) },
+        onLongClickNote = { viewModel.onEvent(AllNotesEvent.SelectNote(it)) }
     ) {
         viewModel.onEvent(AllNotesEvent.DeleteNote(it))
         scope.launch {
