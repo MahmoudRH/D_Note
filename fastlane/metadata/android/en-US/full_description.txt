@@ -1,0 +1,1 @@
+<p><i>D Note</i> is a light-weight app to take notes.</p><p><br><b>Features:</b></p><ul><li>View All Notes</li><li>Adding a Note.</li><li>Updateing a Note.</li><li>Deleting a Note , Deleting Selected Notes, Deleting All Notes.</li><li>Swipe to Delete a Note.</li><li>Undo Deletion.</li><li>Search Notes.</li></ul>
