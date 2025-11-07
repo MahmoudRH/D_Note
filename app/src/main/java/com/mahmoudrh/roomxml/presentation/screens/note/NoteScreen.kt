@@ -47,11 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mahmoudrh.roomxml.R
-import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
 private enum class ViewType(val value: Int) {
@@ -59,12 +55,14 @@ private enum class ViewType(val value: Int) {
     EditMode(1)
 }
 
-@Destination<RootGraph>(navArgs = NoteNavArgs::class)
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class
 )
 @Composable
-fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: DestinationsNavigator) {
+fun NoteScreen(
+    viewModel: NoteViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+) {
 
     val eventName = viewModel.eventName
     val icon = if (viewModel.isEditModeEnabled.value) Icons.Default.Check else Icons.Default.Edit
@@ -96,10 +94,10 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
                     }
                     keyboardController?.hide()
                 } else {
-                    navigator.popBackStack()
+                    onNavigateBack()
                 }
             } else {
-                navigator.popBackStack()
+                onNavigateBack()
             }
         },
         onActionClick = {
@@ -133,7 +131,7 @@ fun NoteScreen(viewModel: NoteViewModel = hiltViewModel(), navigator: Destinatio
             LocalContext.current,
             stringResource(R.string.success, stringResource(eventName.intValue)), Toast.LENGTH_SHORT
         ).show()
-        navigator.popBackStack()
+        onNavigateBack()
     }
 }
 
@@ -195,8 +193,6 @@ private fun NoteUI(
     }
 }
 
-data class NoteNavArgs(val note: Note?)
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EditingNote(
@@ -222,7 +218,9 @@ private fun EditingNote(
         )
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxSize().imePadding(),
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding(),
             value = noteContent,
             onValueChange = onContentChange,
             label = { Text(text = stringResource(R.string.content)) },

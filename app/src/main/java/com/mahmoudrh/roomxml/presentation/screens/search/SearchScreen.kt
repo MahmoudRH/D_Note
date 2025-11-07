@@ -1,7 +1,11 @@
 package com.mahmoudrh.roomxml.presentation.screens.search
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -19,19 +23,18 @@ import com.mahmoudrh.roomxml.presentation.ui_components.AppTopBars
 import com.mahmoudrh.roomxml.presentation.ui_components.EmptyListScreen
 import com.mahmoudrh.roomxml.presentation.ui_components.LoadingScreen
 import com.mahmoudrh.roomxml.presentation.ui_components.NoteItem
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.NoteScreenDestination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination<RootGraph>
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navigator: DestinationsNavigator) {
+fun SearchScreen(
+    viewModel: SearchViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+    onClickNote: (Int) -> Unit,
+) {
     val focusRequester = FocusRequester()
 
     Column(Modifier.fillMaxSize()) {
         AppTopBars.SearchTopBar(
-            onNavigateBack = { navigator.popBackStack() },
+            onNavigateBack = onNavigateBack,
             hint = "Search..",
             focusRequester = focusRequester,
             searchWord = viewModel.searchWord,
@@ -52,7 +55,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navigator: Destin
                     NoteItem(
                         modifier = Modifier.padding(vertical = 8.dp),
                         note = it,
-                        onClick = { navigator.navigate(NoteScreenDestination(it)) },
+                        onClick = { onClickNote(it.id) },
                     )
                 }
             }

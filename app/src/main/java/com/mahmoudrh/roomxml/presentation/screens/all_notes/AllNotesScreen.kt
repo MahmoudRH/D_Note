@@ -20,32 +20,26 @@ import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.utils.OrderBy
 import com.mahmoudrh.roomxml.presentation.ui_components.*
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.NoteScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.SearchScreenDestination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
-@RootGraph()
-@Destination<RootGraph>(start = true)
 @Composable
 fun AllNotesScreen(
     viewModel: AllNotesViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    onNoteClicked: (Int?) -> Unit,
+    onClickSearch: () -> Unit,
 ) {
     val notesState = viewModel.notesState.value
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     AllNotesUI(
         notesState = notesState,
-        onClickSearch = { navigator.navigate(SearchScreenDestination) },
-        onClickAdd = { navigator.navigate(NoteScreenDestination(null)) },
+        onClickSearch = { onClickSearch() },
+        onClickAdd = { onNoteClicked(null) },
         onClickOrder = { viewModel.onEvent(AllNotesEvent.ToggleOrderSection) },
         onOrderChanged = { viewModel.onEvent(AllNotesEvent.Order(it)) },
         onClickDeleteSelectedNote = { viewModel.onEvent(AllNotesEvent.DeleteSelectedNotes) },
         onClickDeleteAll = { viewModel.onEvent(AllNotesEvent.DeleteAllNotes) },
-        onClickNoteItem = { navigator.navigate(NoteScreenDestination(it)) },
+        onClickNoteItem = { onNoteClicked(it.id) },
         onLongClickNote = { viewModel.onEvent(AllNotesEvent.SelectNote(it)) }
     ) {
         viewModel.onEvent(AllNotesEvent.DeleteNote(it))
@@ -149,15 +143,15 @@ private fun AllNotesUI(
                     }
                 }
             }
-            items(notesState.notes, key = { it.id }) {
+            items(notesState.notes, key = { it.id }) { note ->
 
                 NoteItem(
                     modifier = Modifier.padding(vertical = 8.dp),
-                    note = it,
+                    note = note,
                     isSelectionModeEnabled = notesState.isSelectionModeEnabled,
-                    onClick = { onClickNoteItem(it) },
-                    onLongClick = { onLongClickNote(it) },
-                    onSwipeOut = { onSwipeNoteOut(it) }
+                    onClick = { onClickNoteItem(note) },
+                    onLongClick = { onLongClickNote(note) },
+                    onSwipeOut = { onSwipeNoteOut(note) }
                 )
             }
         }

@@ -22,6 +22,9 @@ interface NoteDAO {
     @Query("SELECT * FROM notes")
     fun getAllNotes(): Flow<List<Note>>
 
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun getNoteById(id: Int): Note?
+
     @Query("SELECT * FROM notes WHERE title LIKE '%' || :searchWord || '%'")
     fun searchNotes(searchWord: String? = null): Flow<List<Note>>
 }

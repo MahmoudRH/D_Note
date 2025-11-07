@@ -37,7 +37,8 @@ object AppModule {
             updateNote = UpdateNote(repository),
             searchNotes = SearchNotes(repository),
             deleteAllNotes = DeleteAllNotes(repository),
-            insertNote = InsertNote(repository)
+            insertNote = InsertNote(repository),
+            getNoteById = GetNoteById(repository)
         )
     }
 }

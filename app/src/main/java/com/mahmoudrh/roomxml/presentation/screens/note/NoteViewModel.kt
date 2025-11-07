@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.mahmoudrh.roomxml.R
 import com.mahmoudrh.roomxml.domain.models.Note
 import com.mahmoudrh.roomxml.domain.usecases.NoteUseCases
-import com.ramcosta.composedestinations.generated.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
@@ -21,20 +20,28 @@ open class NoteViewModel @Inject constructor(
 ) : ViewModel() {
     val noteTitle = mutableStateOf("")
     val noteContent = mutableStateOf("")
-    val note = handle.navArgs<NoteNavArgs>().note
+    var note: Note? = null
     val isTitleError = mutableStateOf(false)
     val isContentError = mutableStateOf(false)
     val isEventSuccess = mutableStateOf(false)
     val eventName = mutableIntStateOf(R.string.adding_new_note)
     val canDoAction = mutableStateOf<Boolean>(false)
     val isEditModeEnabled = mutableStateOf<Boolean>(true)
+
     init {
-        note?.let {
-            eventName.intValue = R.string.viewing_note
-            noteTitle.value = it.title
-            noteContent.value = it.content
-            isEditModeEnabled.value = false
-            canDoAction.value = true
+        handle.get<String>("noteId")?.let { noteId ->
+            if (noteId != "null") {
+                viewModelScope.launch {
+                    noteUseCases.getNoteById(noteId.toInt())?.also { fetchedNote ->
+                        note = fetchedNote
+                        noteTitle.value = fetchedNote.title
+                        noteContent.value = fetchedNote.content
+                        eventName.intValue = R.string.viewing_note
+                        isEditModeEnabled.value = false
+                        canDoAction.value = true
+                    }
+                }
+            }
         }
     }
 

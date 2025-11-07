@@ -27,6 +27,10 @@ class NotesRepositoryImpl(private val dao: NoteDAO) : NotesRepository {
         return dao.searchNotes(searchWord)
     }
 
+    override suspend fun getNoteById(id: Int): Note? {
+        return dao.getNoteById(id)
+    }
+
     override fun getAllNotes(): Flow<List<Note>> {
         return dao.getAllNotes()
     }
