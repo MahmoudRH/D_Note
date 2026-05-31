@@ -9,4 +9,5 @@
 local.properties
 /app/release
 /app/debug
-/.idea
+.idea
+.kotlin
